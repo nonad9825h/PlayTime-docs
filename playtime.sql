@@ -16,29 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `activeevents`
+-- Table structure for table `activeevent`
 --
 
-DROP TABLE IF EXISTS `activeevents`;
+DROP TABLE IF EXISTS `activeevent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `activeevents` (
+CREATE TABLE `activeevent` (
   `id_event` int NOT NULL,
   `id_user` int NOT NULL,
   KEY `id_events_fk_idx` (`id_event`),
   KEY `id_user_fk_idx` (`id_user`),
   CONSTRAINT `id_events_fk` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`),
-  CONSTRAINT `id_user_fk` FOREIGN KEY (`id_user`) REFERENCES `users` (`iduser`)
+  CONSTRAINT `id_user_fk` FOREIGN KEY (`id_user`) REFERENCES `user` (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `activeevents`
+-- Dumping data for table `activeevent`
 --
 
-LOCK TABLES `activeevents` WRITE;
-/*!40000 ALTER TABLE `activeevents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `activeevents` ENABLE KEYS */;
+LOCK TABLES `activeevent` WRITE;
+/*!40000 ALTER TABLE `activeevent` DISABLE KEYS */;
+/*!40000 ALTER TABLE `activeevent` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -65,7 +65,7 @@ CREATE TABLE `event` (
   KEY `idx_event_date` (`date_event`),
   KEY `idx_event_location` (`location`(100)),
   KEY `id_game_fk_idx` (`id_game`),
-  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`iduser`) ON DELETE CASCADE,
+  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`iduser`) ON DELETE CASCADE,
   CONSTRAINT `id_game_fk` FOREIGN KEY (`id_game`) REFERENCES `game` (`id_game`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -96,7 +96,7 @@ CREATE TABLE `game` (
   `description_game` varchar(500) NOT NULL,
   PRIMARY KEY (`id_game`),
   KEY `id_genres_fk_idx` (`id_genres`),
-  CONSTRAINT `id_genres_fk` FOREIGN KEY (`id_genres`) REFERENCES `genres` (`id_genres`)
+  CONSTRAINT `id_genres_fk` FOREIGN KEY (`id_genres`) REFERENCES `genre` (`id_genres`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -110,13 +110,13 @@ LOCK TABLES `game` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `genres`
+-- Table structure for table `genre`
 --
 
-DROP TABLE IF EXISTS `genres`;
+DROP TABLE IF EXISTS `genre`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `genres` (
+CREATE TABLE `genre` (
   `id_genres` int NOT NULL,
   `name_genres` varchar(300) NOT NULL,
   PRIMARY KEY (`id_genres`)
@@ -124,22 +124,22 @@ CREATE TABLE `genres` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `genres`
+-- Dumping data for table `genre`
 --
 
-LOCK TABLES `genres` WRITE;
-/*!40000 ALTER TABLE `genres` DISABLE KEYS */;
-/*!40000 ALTER TABLE `genres` ENABLE KEYS */;
+LOCK TABLES `genre` WRITE;
+/*!40000 ALTER TABLE `genre` DISABLE KEYS */;
+/*!40000 ALTER TABLE `genre` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `reviews`
+-- Table structure for table `review`
 --
 
-DROP TABLE IF EXISTS `reviews`;
+DROP TABLE IF EXISTS `review`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `reviews` (
+CREATE TABLE `review` (
   `id_reviews` int NOT NULL,
   `id_event` int NOT NULL,
   `id_user_send` int NOT NULL COMMENT 'Идентификатор пользователя который ОТПРАВИЛ отзыв',
@@ -152,18 +152,18 @@ CREATE TABLE `reviews` (
   KEY `id_user_send_fk_idx` (`id_user_send`),
   KEY `id_user_accept_idx` (`id_user_accept`),
   CONSTRAINT `id_event_fk` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`),
-  CONSTRAINT `id_user_accept` FOREIGN KEY (`id_user_accept`) REFERENCES `users` (`iduser`),
-  CONSTRAINT `id_user_send_fk` FOREIGN KEY (`id_user_send`) REFERENCES `users` (`iduser`)
+  CONSTRAINT `id_user_accept` FOREIGN KEY (`id_user_accept`) REFERENCES `user` (`iduser`),
+  CONSTRAINT `id_user_send_fk` FOREIGN KEY (`id_user_send`) REFERENCES `user` (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reviews`
+-- Dumping data for table `review`
 --
 
-LOCK TABLES `reviews` WRITE;
-/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
+LOCK TABLES `review` WRITE;
+/*!40000 ALTER TABLE `review` DISABLE KEYS */;
+/*!40000 ALTER TABLE `review` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -192,13 +192,13 @@ INSERT INTO `typecity` VALUES (4,'Екатеринбург'),(5,'Казань'),
 UNLOCK TABLES;
 
 --
--- Table structure for table `users`
+-- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
+CREATE TABLE `user` (
   `iduser` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `surname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -220,17 +220,17 @@ CREATE TABLE `users` (
   KEY `idx_email` (`email`),
   KEY `idx_city` (`type_city`),
   KEY `idx_rating` (`rating`),
-  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`type_city`) REFERENCES `typecity` (`idcity`) ON DELETE RESTRICT
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`type_city`) REFERENCES `typecity` (`idcity`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `user`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -242,4 +242,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-24 10:18:31
+-- Dump completed on 2025-09-24 12:07:02
