@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: playtime
+-- Host: localhost    Database: playtime
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	8.0.42
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,29 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `activeevent`
+-- Table structure for table `active_events`
 --
 
-DROP TABLE IF EXISTS `activeevent`;
+DROP TABLE IF EXISTS `active_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `activeevent` (
+CREATE TABLE `active_events` (
   `id_event` int NOT NULL,
   `id_user` int NOT NULL,
   KEY `id_events_fk_idx` (`id_event`),
   KEY `id_user_fk_idx` (`id_user`),
   CONSTRAINT `id_events_fk` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`),
-  CONSTRAINT `id_user_fk` FOREIGN KEY (`id_user`) REFERENCES `user` (`iduser`)
+  CONSTRAINT `id_user_fk` FOREIGN KEY (`id_user`) REFERENCES `users` (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `activeevent`
+-- Dumping data for table `active_events`
 --
 
-LOCK TABLES `activeevent` WRITE;
-/*!40000 ALTER TABLE `activeevent` DISABLE KEYS */;
-/*!40000 ALTER TABLE `activeevent` ENABLE KEYS */;
+LOCK TABLES `active_events` WRITE;
+/*!40000 ALTER TABLE `active_events` DISABLE KEYS */;
+/*!40000 ALTER TABLE `active_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -52,20 +52,19 @@ CREATE TABLE `event` (
   `id_event` int NOT NULL AUTO_INCREMENT,
   `id_user` int NOT NULL COMMENT 'айди организатора',
   `id_game` int NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'наименование события',
-  `date_event` datetime NOT NULL COMMENT 'дата и время',
-  `location` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'место проведения',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'наименование события',
+  `date` datetime NOT NULL COMMENT 'дата и время',
+  `location` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'место проведения',
   `duration` int NOT NULL COMMENT 'продолжительность (в минутах)',
   `max_player` int NOT NULL COMMENT 'макс. кол-во игроков',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'краткое описание',
-  `status` enum('На рассмотрении','Запланировано','Окончено','Отменено') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Запланировано',
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT 'краткое описание',
+  `status` enum('Запланировано','Окончено','Отменено') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Запланировано',
   PRIMARY KEY (`id_event`),
-  UNIQUE KEY `max_player_UNIQUE` (`max_player`),
   KEY `idx_organizer` (`id_user`),
-  KEY `idx_event_date` (`date_event`),
+  KEY `idx_event_date` (`date`),
   KEY `idx_event_location` (`location`(100)),
   KEY `id_game_fk_idx` (`id_game`),
-  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`iduser`) ON DELETE CASCADE,
+  CONSTRAINT `event_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`iduser`) ON DELETE CASCADE,
   CONSTRAINT `id_game_fk` FOREIGN KEY (`id_game`) REFERENCES `game` (`id_game`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -96,7 +95,7 @@ CREATE TABLE `game` (
   `description_game` varchar(500) NOT NULL,
   PRIMARY KEY (`id_game`),
   KEY `id_genres_fk_idx` (`id_genres`),
-  CONSTRAINT `id_genres_fk` FOREIGN KEY (`id_genres`) REFERENCES `genre` (`id_genres`)
+  CONSTRAINT `id_genres_fk` FOREIGN KEY (`id_genres`) REFERENCES `genres` (`id_genres`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -110,13 +109,13 @@ LOCK TABLES `game` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `genre`
+-- Table structure for table `genres`
 --
 
-DROP TABLE IF EXISTS `genre`;
+DROP TABLE IF EXISTS `genres`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `genre` (
+CREATE TABLE `genres` (
   `id_genres` int NOT NULL,
   `name_genres` varchar(300) NOT NULL,
   PRIMARY KEY (`id_genres`)
@@ -124,113 +123,111 @@ CREATE TABLE `genre` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `genre`
+-- Dumping data for table `genres`
 --
 
-LOCK TABLES `genre` WRITE;
-/*!40000 ALTER TABLE `genre` DISABLE KEYS */;
-/*!40000 ALTER TABLE `genre` ENABLE KEYS */;
+LOCK TABLES `genres` WRITE;
+/*!40000 ALTER TABLE `genres` DISABLE KEYS */;
+/*!40000 ALTER TABLE `genres` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `review`
+-- Table structure for table `reviews`
 --
 
-DROP TABLE IF EXISTS `review`;
+DROP TABLE IF EXISTS `reviews`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `review` (
+CREATE TABLE `reviews` (
   `id_reviews` int NOT NULL,
   `id_event` int NOT NULL,
   `id_user_send` int NOT NULL COMMENT 'Идентификатор пользователя который ОТПРАВИЛ отзыв',
   `id_user_accept` int NOT NULL COMMENT 'Идентификатор пользователя НА которого написан отзыв',
   `rating` int NOT NULL,
   `comment` text,
-  `created_at` datetime NOT NULL,
   PRIMARY KEY (`id_reviews`),
   KEY `id_event_fk_idx` (`id_event`),
   KEY `id_user_send_fk_idx` (`id_user_send`),
   KEY `id_user_accept_idx` (`id_user_accept`),
   CONSTRAINT `id_event_fk` FOREIGN KEY (`id_event`) REFERENCES `event` (`id_event`),
-  CONSTRAINT `id_user_accept` FOREIGN KEY (`id_user_accept`) REFERENCES `user` (`iduser`),
-  CONSTRAINT `id_user_send_fk` FOREIGN KEY (`id_user_send`) REFERENCES `user` (`iduser`)
+  CONSTRAINT `id_user_accept` FOREIGN KEY (`id_user_accept`) REFERENCES `users` (`iduser`),
+  CONSTRAINT `id_user_send_fk` FOREIGN KEY (`id_user_send`) REFERENCES `users` (`iduser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `review`
+-- Dumping data for table `reviews`
 --
 
-LOCK TABLES `review` WRITE;
-/*!40000 ALTER TABLE `review` DISABLE KEYS */;
-/*!40000 ALTER TABLE `review` ENABLE KEYS */;
+LOCK TABLES `reviews` WRITE;
+/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `typecity`
+-- Table structure for table `type_city`
 --
 
-DROP TABLE IF EXISTS `typecity`;
+DROP TABLE IF EXISTS `type_city`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `typecity` (
+CREATE TABLE `type_city` (
   `idcity` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'наименование города',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'наименование города',
   PRIMARY KEY (`idcity`),
   UNIQUE KEY `unique_city_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `typecity`
+-- Dumping data for table `type_city`
 --
 
-LOCK TABLES `typecity` WRITE;
-/*!40000 ALTER TABLE `typecity` DISABLE KEYS */;
-INSERT INTO `typecity` VALUES (4,'Екатеринбург'),(5,'Казань'),(1,'Москва'),(3,'Новосибирск'),(2,'Санкт-Петербург');
-/*!40000 ALTER TABLE `typecity` ENABLE KEYS */;
+LOCK TABLES `type_city` WRITE;
+/*!40000 ALTER TABLE `type_city` DISABLE KEYS */;
+INSERT INTO `type_city` VALUES (4,'Екатеринбург'),(5,'Казань'),(1,'Москва'),(3,'Новосибирск'),(2,'Санкт-Петербург');
+/*!40000 ALTER TABLE `type_city` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
+CREATE TABLE `users` (
   `iduser` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `surname` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `patronymic` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'почта',
-  `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'пароль (хэш)',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `surname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `patronymic` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'почта',
+  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'пароль (хэш)',
   `type_city` int NOT NULL COMMENT 'город',
   `age` int DEFAULT NULL COMMENT 'возраст',
-  `sex` enum('Мужской','Женский') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'пол (M - мужской, F - женский, O - другой)',
+  `sex` enum('Мужской','Женский') COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'пол (M - мужской, F - женский, O - другой)',
   `rating` decimal(3,2) DEFAULT '0.00' COMMENT 'рейтинг пользователя',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT 'краткое описание',
-  `steam_link` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `discord_link` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `telegram_link` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` enum('Пользователь','Администратор') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT 'краткое описание',
+  `discord_link` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `telegram_link` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `role` enum('Пользователь','Администратор') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`iduser`),
   UNIQUE KEY `email` (`email`),
   KEY `idx_email` (`email`),
   KEY `idx_city` (`type_city`),
   KEY `idx_rating` (`rating`),
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`type_city`) REFERENCES `typecity` (`idcity`) ON DELETE RESTRICT
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`type_city`) REFERENCES `type_city` (`idcity`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `users`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -242,4 +239,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-24 12:07:02
+-- Dump completed on 2025-09-26 14:24:34
